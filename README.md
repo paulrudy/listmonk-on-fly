@@ -182,6 +182,8 @@ Then scale out your app to include these volumes as replicas. `flyctl scale coun
 
 Use `flyctl status -a <app-name-db>` to check that the new volume is running with no errors. May take a minute or two.
 
+Now change the temporarily change the primary region of the app (you'll repeat these actions again to change it back):
+
 > #### Changing the primary region of the app
 >
 > (instructions taken from [this post](https://community.fly.io/t/what-is-the-correct-process-to-change-the-postgres-leader-region/4831/2))
