@@ -209,3 +209,5 @@ Create an encrypted replica in the original region: `flyctl volumes create pg_da
 Repeat the steps above for [Changing the primary region of the app](https://github.com/paulrudy/listmonk-on-fly/#changing-the-primary-region-of-the-app), but this time to move it from the new back to the original region.
 
 Use `flyctl status` to confirm original region is the leader.
+
+If you want to keep the replica(s) you created as backups in case of corruption or failure of the database, then you're done. If you want to go back to only one volume, then double-check that you know which volume is the replica to delete with `flyctl status`, then get the replica's `<volume id>` with `flyctl volumes list` and delete it with `flyctl volumes delete <volume id>`.
