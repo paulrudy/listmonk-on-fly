@@ -63,7 +63,7 @@ When it asks you if you want to set up a Postgres database, type `y`.
 
 Choose the "Development" level configuration (lowest, free tier).
 
-Once your postgres cluster is created, copy the information `flyctl` displays: `Username`, `Password`, `Hostname`, `Proxy Port`, and `PG Port`. These are all default values or based on your app name, but `Password` is unique, so be sure you save it.
+Once your postgres cluster is created, copy the information `flyctl` displays: `Username`, `Password`, `Hostname`, `Proxy Port`, and `PG Port`. These are all default values or based on your app name, but `Password` is unique, so be sure you save it. And you'll need `Hostname` a bit later on.
 
 Also take note of the name of your Postgres app in the line:
 
@@ -103,7 +103,7 @@ Between the double quotes `"` for each key, enter the following info that you'll
 
 - `ADMIN_USERNAME`: create a user name for accessing listmonk's admin page with
 - `ADMIN_PASSWORD`: create a unique password for that user name
-- `POSTGRES_HOST`: the url `fly launch` gave you along with the `postgres` password (it's probably `<app-name-db>.internal`)
+- `POSTGRES_HOST`: the `Hostname` that the Postgres cluster setup process of `fly launch` gave you (it's probably `<app-name-db>.internal`)
 - `POSTGRES_PASSWORD`: the password you _created_ when you made the `listmonk` user in the Postgres command line—_not_ the master `postgres` password that you saved earlier.
 - `POSTGRES_DATABASE`: the name of the database you granted access to for user `listmonk`.
 
