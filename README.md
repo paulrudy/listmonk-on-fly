@@ -97,7 +97,7 @@ Use `flyctl vol create listmonk_data --region <region code> --size 1` to create 
 
 ### 6. Enter keys and values to pass to listmonk at build time
 
-Edit `fly.toml` and check if the `[build]` section you copied is still there. It likely isn't. Re-add it from our copy (or copy this repo). I don't think placement matters, but I put it just above `[env]`.
+Edit `fly.toml` and check if the `[build]` section you copied is still there. It likely isn't. Re-add it from your copy (or copy this repo). I don't think placement matters, but I put it just above `[env]`.
 
 Between the double quotes `"` for each key, enter the following info that you'll be passing in to your listmonk app build:
 
