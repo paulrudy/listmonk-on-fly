@@ -152,64 +152,14 @@ On Fly, this is unnecessary because:
 
 ### Optionally add a replica of the Postgres volume
 
-In case of database failure, it's good to have a backup. Adding a replica is simple. First, though, read about encrypting the Postgres volume below. If you choose to do that, creating a replica is already part of that process.
-
-If you don't want to encrypt, just create a replica like this:
-
-`flyctl volumes list <app-name-db>` and get the size of the volume.
-
-`flyctl volumes create pg_data -a <app-name-db> --size <same size as original volume> --region <region code> --no-encryption` and choose a different region for a volume.
-
-Create other unencrypted volumes if desired with the same command.
-
-Then scale out your app to include these volumes as replicas. `flyctl scale count <# of volumes including replicas> -a <app-name-db>`
-
-Use `flyctl status -a <app-name-db>` to check that the new volume is running with no errors. May take a minute or two.
-
-### Optionally encrypt the Postgres volume
-
-`flyctl launch` creates encrypted app volumes by default, except for Postgres app volumes.
-
-If you want to encrypt the Postgres app volume, there may be an easier way but this how I did it:
+In case of database failure, it's good to have a backup. Adding a replica is simple:
 
 `flyctl volumes list <app-name-db>` and get the size of the volume.
 
 `flyctl volumes create pg_data -a <app-name-db> --size <same size as original volume> --region <region code>` and choose a different region for a volume.
 
-Create other encrypted volumes if desired with the same command.
+Create other volumes if desired with the same command.
 
 Then scale out your app to include these volumes as replicas. `flyctl scale count <# of volumes including replicas> -a <app-name-db>`
 
 Use `flyctl status -a <app-name-db>` to check that the new volume is running with no errors. May take a minute or two.
-
-Now change the temporarily change the primary region of the app (you'll repeat these actions again to change it back):
-
-> #### Changing the primary region of the app
->
-> (instructions taken from [this post](https://community.fly.io/t/what-is-the-correct-process-to-change-the-postgres-leader-region/4831/2))
->
-> Create a new empty directory on your computer for the files of the Postgres app and `cd` into it.
->
-> `flyctl config save --app <app-name-db>` to save the Postgres app's `fly.toml` configuration file.
->
-> In `fly.toml`, edit `PRIMARY_REGION` to match new region code.
->
-> Get the major version of your Postgres with `flyctl image show`. (If Tag indicates `14.2`, major version is `14`).
->
-> `flyctl deploy . --image flyio/postgres:<major-version> --strategy=immediate`
->
-> For Postgres 13/14: `flyctl ssh console --app <app-name-db>` then in the ssh shell, `pg-failover`, then after success, `exit`. (For other versions of Postgres, see [the original post](https://community.fly.io/t/what-is-the-correct-process-to-change-the-postgres-leader-region/4831/2))
->
-> Check `flyctl status` until new region shows as leader and not replica.
->
-> _(End of [Changing the primary region of the app](https://github.com/paulrudy/listmonk-on-fly/#changing-the-primary-region-of-the-app))_
-
-Once the volume in _original region_ shows as a replica, get its `<volume id>` with `flyctl volumes list` and delete it with `flyctl volumes delete <volume id>`.
-
-Create an encrypted replica in the original region: `flyctl volumes create pg_data -a <app-name-db> --size <same size as original volume> --region <region code>` and choose the original region.
-
-Repeat the steps above for [Changing the primary region of the app](https://github.com/paulrudy/listmonk-on-fly/#changing-the-primary-region-of-the-app), but this time to move it from the new back to the original region.
-
-Use `flyctl status` to confirm original region is the leader.
-
-If you want to keep the replica(s) you created as backups in case of corruption or failure of the database, then you're done. If you want to go back to only one volume, then double-check that you know which volume is the replica to delete with `flyctl status`, then get the replica's `<volume id>` with `flyctl volumes list` and delete it with `flyctl volumes delete <volume id>`.
