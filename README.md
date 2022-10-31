@@ -160,7 +160,7 @@ If you don't want to encrypt, just create a replica like this:
 
 `flyctl volumes create pg_data -a <app-name-db> --size <same size as original volume> --region <region code> --no-encryption` and choose a different region for a volume.
 
-Create other encrypted volumes if desired with the same command.
+Create other unencrypted volumes if desired with the same command.
 
 Then scale out your app to include these volumes as replicas. `flyctl scale count <# of volumes including replicas> -a <app-name-db>`
 
